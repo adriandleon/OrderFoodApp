@@ -12,7 +12,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,6 +21,8 @@ public class SignInActivity extends AppCompatActivity {
 
     private static final String TAG = SignInActivity.class.getSimpleName();
 
+    private FirebaseAuth mAuth;
+
     @BindView(R.id.email_editText) AppCompatEditText mEmailEditText;
     @BindView(R.id.password_editText) AppCompatEditText mPasswordEditText;
     
@@ -30,6 +31,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
+        mAuth = FirebaseAuth.getInstance();
     }
     
     @OnClick(R.id.btnSignIn)
@@ -40,8 +42,6 @@ public class SignInActivity extends AppCompatActivity {
 
         String email = mEmailEditText.getText().toString();
         String password = mPasswordEditText.getText().toString();
-
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         final ProgressDialog mProgressDialog = new ProgressDialog(SignInActivity.this);
         mProgressDialog.setMessage("Login in. Please wait...");
@@ -57,9 +57,8 @@ public class SignInActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(SignInActivity.this, "signInWithEmail:success",
-                                    Toast.LENGTH_SHORT).show();
+                            startActivity(HomeActivity.newIntent(SignInActivity.this));
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.d(TAG, "signInWithEmail:failure", task.getException());
