@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -28,7 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.japsystem.orderfoodapp.model.Category;
-import com.japsystem.orderfoodapp.viewholder.MenuViewHolder;
+import com.japsystem.orderfoodapp.viewholder.CategoryViewHolder;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
@@ -42,7 +41,7 @@ public class HomeActivity extends AppCompatActivity
     private FirebaseDatabase mDatabase;
     private DatabaseReference mCategory;
     private FirebaseAuth mAuth;
-    FirebaseRecyclerAdapter<Category, MenuViewHolder> mFirebaseAdapter;
+    FirebaseRecyclerAdapter<Category, CategoryViewHolder> mFirebaseAdapter;
 
     @BindView(R.id.recycler_menu) RecyclerView mRecyclerView;
 
@@ -109,17 +108,17 @@ public class HomeActivity extends AppCompatActivity
                 .setQuery(mCategory, Category.class)
                 .build();
 
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Category, MenuViewHolder>(options) {
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Category, CategoryViewHolder>(options) {
 
             @NonNull
             @Override
-            public MenuViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.menu_category_item, viewGroup, false);
-                return new MenuViewHolder(view);
+            public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.category_item, viewGroup, false);
+                return new CategoryViewHolder(view);
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull MenuViewHolder holder, int position, @NonNull final Category model) {
+            protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull final Category model) {
                 holder.mTextView.setText(model.getName());
 
                 OkHttpClient okHttpClient = new OkHttpClient();
@@ -136,8 +135,9 @@ public class HomeActivity extends AppCompatActivity
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        Toast.makeText(HomeActivity.this, "Clicked: " + model.getName(),
-                                Toast.LENGTH_SHORT).show();
+                        // Start FoodListActivity
+                        startActivity(FoodListActivity.newIntent(HomeActivity.this,
+                                mFirebaseAdapter.getRef(position).getKey()));
                     }
                 });
             }

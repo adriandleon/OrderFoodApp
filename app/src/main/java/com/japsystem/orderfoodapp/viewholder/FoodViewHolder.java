@@ -12,22 +12,22 @@ import com.japsystem.orderfoodapp.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MenuViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class FoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    @BindView(R.id.menu_category_image) public ImageView mImageView;
-    @BindView(R.id.menu_category_name) public TextView mTextView;
+    @BindView(R.id.food_name) public TextView mTextView;
+    @BindView(R.id.food_image) public ImageView mImageView;
 
     private ItemClickListener mItemClickListener;
 
-    public MenuViewHolder(@NonNull View itemView) {
+    public void setItemClickListener(ItemClickListener itemClickListener) {
+        mItemClickListener = itemClickListener;
+    }
+
+    public FoodViewHolder(@NonNull View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
 
         itemView.setOnClickListener(this);
-    }
-
-    public void setItemClickListener(ItemClickListener itemClickListener) {
-        mItemClickListener = itemClickListener;
     }
 
     @Override
